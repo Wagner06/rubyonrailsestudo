@@ -1,10 +1,18 @@
 Rails.application.routes.draw do
+LOCALES = /en|pt\-BR/
+
+scope "(:locale)", :locale => LOCALES do
   resources :rooms
   resources :users
 
-  root :to => "home#index"
+  resource :confirmation, :only => [:show]
 
-  
+  resource :user_sessions, :only => [:create, :new, :destroy]
+end
+
+  match '/:locale' => 'home#index', :locale => LOCALES, :via => [:get, :post]
+  root :to => "home#index"
+end 
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -60,4 +68,4 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-end
+
